@@ -17,16 +17,6 @@ export default function Footer(props: { url: URL }) {
       <p>© {SITE_NAME}</p>
       <nav class={NAV_STYLES}>
         <a
-          href="/stats"
-          class={getToggledStyles(
-            LINK_STYLES,
-            ACTIVE_LINK_STYLES,
-            props.url.pathname === "/stats",
-          )}
-        >
-          Stats
-        </a>
-        <a
           href="/blog"
           class={getToggledStyles(
             LINK_STYLES,
@@ -39,15 +29,15 @@ export default function Footer(props: { url: URL }) {
         <a
           href="https://discord.gg/deno"
           target="_blank"
-          aria-label="Deno SaaSKit on Discord"
+          aria-label="Discuss Deno on Discord"
           class={LINK_STYLES}
         >
           <Discord class="h-6 w-6" />
         </a>
         <a
-          href="https://github.com/denoland/saaskit"
+          href="https://github.com/kwhinnery/denonatureschool"
           target="_blank"
-          aria-label="Deno SaaSKit repo on GitHub"
+          aria-label="Deno Nature School repo on GitHub"
           class={LINK_STYLES}
         >
           <GitHub class="h-6 w-6" />

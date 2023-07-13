@@ -8,8 +8,7 @@ export default function UserPostedAt(
   return (
     <p class="text-gray-500">
       <img
-        //adding the extra parameter to resize the github avatar
-        src={props.user.avatarUrl + "&s=36"}
+        src={props.user.avatarUrl}
         alt={props.user.login}
         crossOrigin="anonymous"
         class="h-6 w-auto rounded-full aspect-square inline-block mr-1 align-bottom"
