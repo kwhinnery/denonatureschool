@@ -17,25 +17,7 @@ import {
   getRedirectUrlCookie,
 } from "@/utils/redirect.ts";
 
-interface GitHubUser {
-  id: number;
-  login: string;
-  avatar_url: string;
-  email: string;
-}
-
 const authUrl = Deno.env.get("AUTH0_URL")!;
-
-async function getGitHubUser(accessToken: string): Promise<GitHubUser> {
-  const response = await fetch("https://api.github.com/user", {
-    headers: { authorization: `Bearer ${accessToken}` },
-  });
-  if (!response.ok) {
-    await response.body?.cancel();
-    throw new Error();
-  }
-  return await response.json() as GitHubUser;
-}
 
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, State> = {
