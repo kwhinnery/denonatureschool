@@ -24,6 +24,8 @@ interface GitHubUser {
   email: string;
 }
 
+const authUrl = Deno.env.get("AUTH0_URL")!;
+
 async function getGitHubUser(accessToken: string): Promise<GitHubUser> {
   const response = await fetch("https://api.github.com/user", {
     headers: { authorization: `Bearer ${accessToken}` },
@@ -43,33 +45,40 @@ export const handler: Handlers<any, State> = {
       oauth2Client,
       getRedirectUrlCookie(req.headers),
     );
-
     deleteRedirectUrlCookie(response.headers);
 
-    const githubUser = await getGitHubUser(accessToken);
+    const profile = await fetch(`${authUrl}/userinfo`, {
+      headers: { "Authorization": `Bearer ${accessToken}` },
+    });
+    const profileData = await profile.json();
 
-    const user = await getUser(githubUser.id.toString());
+    // Get data from KV about user (if possible)
+    const user = await getUser(profileData.sub);
+
     if (!user) {
+      // Create new user if needed
       let stripeCustomerId = undefined;
       if (stripe) {
         const customer = await stripe.customers.create({
-          email: githubUser.email,
+          email: profileData.email,
         });
         stripeCustomerId = customer.id;
       }
       const user: User = {
-        id: githubUser.id.toString(),
-        login: githubUser.login,
-        avatarUrl: githubUser.avatar_url,
+        id: profileData.sub,
+        login: profileData.email,
+        avatarUrl: profileData.picture,
         stripeCustomerId,
         sessionId,
         ...newUserProps(),
       };
       await createUser(user);
     } else {
+      // Update user
       await deleteUserBySession(sessionId);
       await updateUser({ ...user, sessionId });
     }
+
     return response;
   },
 };
