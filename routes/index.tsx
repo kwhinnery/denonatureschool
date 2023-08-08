@@ -14,7 +14,7 @@ export default function HomePage(props: PageProps) {
   return (
     <main class="flex-1 p-4">
       <section>
-        <h1 class="text-4xl font-bold">Denos should grow up outside</h1>
+        <h1 class="text-4xl font-bold">Denos should grow up outside!</h1>
         <p class="leading-6">marketing copy to go here</p>
       </section>
       <Carousel />
