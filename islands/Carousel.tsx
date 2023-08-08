@@ -6,6 +6,7 @@ const IMAGES = [
   "/dino3.jpeg",
 ];
 
+// deno-lint-ignore no-explicit-any
 function CarouselButton(props: any) {
   return (
     <button class="p-4 m-1" {...props}>
