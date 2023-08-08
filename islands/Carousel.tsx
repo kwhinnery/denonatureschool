@@ -1,5 +1,3 @@
-// @deno-types="npm:@types/react@17"
-import React from "react";
 import { useSignal } from "@preact/signals";
 
 const IMAGES = [
@@ -8,7 +6,7 @@ const IMAGES = [
   "/dino3.jpeg",
 ];
 
-function CarouselButton(props: React.ComponentPropsWithoutRef<"button">) {
+function CarouselButton(props: any) {
   return (
     <button class="p-4 m-1" {...props}>
       {props.children}
