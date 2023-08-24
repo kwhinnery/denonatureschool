@@ -18,6 +18,8 @@ import {
 } from "@/utils/redirect.ts";
 
 const authUrl = Deno.env.get("AUTH0_URL")!;
+const staffRoleId = Deno.env.get("STAFF_ROLE_ID")!;
+const managementApiToken = Deno.env.get("AUTH0_MANAGEMENT_API_KEY")!;
 
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, State> = {
@@ -33,6 +35,15 @@ export const handler: Handlers<any, State> = {
       headers: { "Authorization": `Bearer ${accessToken}` },
     });
     const profileData = await profile.json();
+
+    const rolesResponse = await fetch(
+      new URL(`/api/v2/users/${profileData.sub}/roles`, authUrl),
+      {
+        headers: { "Authorization": `Bearer ${managementApiToken}` },
+      },
+    );
+    const rolesData = await rolesResponse.json();
+    const isStaff = rolesData.length > 0 && rolesData[0].id === staffRoleId;
 
     // Get data from KV about user (if possible)
     const user = await getUser(profileData.sub);
@@ -52,11 +63,13 @@ export const handler: Handlers<any, State> = {
         avatarUrl: profileData.picture,
         stripeCustomerId,
         sessionId,
+        isStaff,
         ...newUserProps(),
       };
       await createUser(user);
     } else {
       // Update user
+      user.isStaff = isStaff;
       await deleteUserBySession(sessionId);
       await updateUser({ ...user, sessionId });
     }

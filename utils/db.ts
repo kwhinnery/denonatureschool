@@ -434,6 +434,7 @@ export interface User {
   avatarUrl: string;
   sessionId: string;
   stripeCustomerId?: string;
+  isStaff?: boolean;
   // The below properties can be automatically generated upon comment creation
   isSubscribed: boolean;
 }

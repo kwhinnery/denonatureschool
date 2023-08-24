@@ -17,12 +17,13 @@ interface RowProps {
   title: string;
   children?: ComponentChild;
   text: string;
+  rowClass?: string;
 }
 
 function Row(props: RowProps) {
   return (
     <li class="py-4">
-      <div class="flex flex-wrap justify-between">
+      <div class={`flex flex-wrap justify-between ${props.rowClass}`}>
         <span>
           <strong>{props.title}</strong>
         </span>
@@ -51,6 +52,15 @@ export default function AccountPage(props: PageProps<AccountState>) {
           title="Username"
           text={props.data.user.login}
         />
+        {props.data.user.isStaff
+          ? (
+            <Row
+              title="Staff Member"
+              text={""}
+              rowClass="italic text-red-500"
+            />
+          )
+          : ""}
         <Row
           title="Subscription"
           text={props.data.user.isSubscribed ? "Premium 🦕" : "Free"}
